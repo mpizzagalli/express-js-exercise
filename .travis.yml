@@ -1,0 +1,22 @@
+language: node_js
+
+node_js:
+  - "10.14.1"
+
+sudo: true
+
+env:
+  - CXX=g++-4.8 NODE_ENV=testing ALBUM_API_URL=https://jsonplaceholder.typicode.com/albums JWT_EXPIRATION_TIME=30m
+addons:
+  apt:
+    sources:
+    - ubuntu-toolchain-r-test
+    packages:
+    - g++-4.8
+
+services:
+  - postgresql
+
+before_script:
+  - psql -c "CREATE DATABASE bookstest;" -U postgres
+  - npm run migrations-test

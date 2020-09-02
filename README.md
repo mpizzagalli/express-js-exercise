@@ -10,23 +10,25 @@ Get the latest version of node from the [official website](https://nodejs.org/) 
 Nvm approach is preferred.
 
 #### Getting dependencies
-Run ```npm install``` or ```yarn``` from rootpath of the project.
+Run ```npm install``` from rootpath of the project.
 
 
 #### Database configuration
-Before running the app, make sure you have [postgresql installed](https://www.digitalocean.com/community/tutorials/how-to-install-and-use-postgresql-on-ubuntu-14-04) and a db created, to create it run the following steps inside a psql terminal:
-1. CREATE DATABASE db_project_name;
-2. \c db_project_name
-3. CREATE ROLE "project_name" LOGIN CREATEDB PASSWORD 'project_name';
+Before running the app, make sure you have [mysql installed](https://www.digitalocean.com/community/tutorials/how-to-install-mysql-on-ubuntu-20-04) and a user and a db created, to create them run the following steps inside a mysql terminal:
+1. CREATE USER 'newuser'@'localhost' IDENTIFIED BY 'password';
+2. GRANT ALL PRIVILEGES ON * . * TO 'newuser'@'localhost';
 
-Then, set in `.env` some variables:
+Then, in the root of the project create a file named `.env` with the database envinronment variables (you can use the `.env.example` we provide as an example):
 - DB_HOST=localhost
-- DB_PORT=5432
-- DB_USERNAME=project_name
-- DB_PASSWORD=project_name
-- DB_NAME=db_project_name
-- DB_NAME_DEV=db_project_name_dev
-- DB_NAME_TEST=db_project_name_test
+- DB_PORT=3306
+- DB_USERNAME=newuser
+- DB_PASSWORD=password
+- DB_NAME_DEV=express_js_example_dev
+- DB_NAME_TEST=express_js_example_test
+
+Finally back from the root of the project you should run in a normal bash terminal:
+1. `./node_modules/.bin/sequelize db:create` to create the development database
+2. `NODE_ENV=testing ./node_modules/.bin/sequelize db:create` to create the testing database
 
 ### Migrations
 
@@ -75,7 +77,7 @@ if (error) {
 To run your tests you first need to config your testing database by setting the env var `DB_NAME_TEST`. as explained
 before in [Database configuration](#database-configuration). Also you need to run the migrations in this exclusive
 testing database each time you have new ones, you can do this by running the command `npm run migrations-test`.
-Once you have all the above done you can run your tests with the following command: `npm test`. For more information refeer to the documentation of [Mocha](https://mochajs.org/) and [Chai](https://www.chaijs.com/).
+Once you have all the above done you can run your tests with the following command: `npm test`. For more information refeer to the documentation of [Jest](https://jestjs.io/docs/en/getting-started).
 
 #### Debugging
 As we know, a NodeJS application is not something easy to debug and because of that we've added the `--inspect` flag to make it simpler. Chrome DevTools will get started when running your app using the start script (`npm start`), making your debugging easier.
